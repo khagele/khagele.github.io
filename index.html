@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Luchtkwaliteit – Grafana</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🌫️ Luchtkwaliteit dashboard</h1>
+    <p>Live metingen via Sensor.Community (Grafana)</p>
+  </header>
+
+  <main class="dashboard">
+
+    <!-- PM2.5 / PM10 -->
+    <section class="panel">
+      <h2>Fijnstof (PM)</h2>
+      <iframe
+        src="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145&orgId=1&from=now-6h&to=now&timezone=browser"
+        loading="lazy">
+      </iframe>
+    </section>
+
+    <!-- Tweede grafiek (voorbeeld) -->
+    <section class="panel">
+      <h2>Laatste 24 uur</h2>
+      <iframe
+        src="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145&orgId=1&from=now-24h&to=now&timezone=browser"
+        loading="lazy">
+      </iframe>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Data: Sensor.Community • Grafana</p>
+  </footer>
+
+</body>
+</html>
