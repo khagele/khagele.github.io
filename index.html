@@ -1,44 +1,81 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Luchtkwaliteit – Grafana</title>
-
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>db11.nl – lokaal dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="scripts.js" defer></script>
 </head>
 <body>
 
-  <header>
-    <h1>🌫️ Luchtkwaliteit dashboard</h1>
-    <p>Live metingen via Sensor.Community (Grafana)</p>
-  </header>
+<nav>
+  <strong>db11.nl</strong>
+  <a class="active" href="index.html">Dashboard</a>
+  <a href="over.html">Over</a>
+  <a href="data.html">Data</a>
+</nav>
 
-  <main class="dashboard">
+<header>
+  <h1>Lokaal dashboard</h1>
+  <p>Sensor esp8266-13493145</p>
+</header>
 
-    <!-- PM2.5 / PM10 -->
-    <section class="panel">
-      <h2>Fijnstof (PM)</h2>
-      <iframe
-        src="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145&orgId=1&from=now-6h&to=now&timezone=browser"
-        loading="lazy">
-      </iframe>
-    </section>
+<section class="controls">
+  <strong>Tijd:</strong>
+  <button id="6h" class="active" onclick="setRange('6h')">6 uur</button>
+  <button id="24h" onclick="setRange('24h')">24 uur</button>
+  <button id="7d" onclick="setRange('7d')">7 dagen</button>
+</section>
 
-    <!-- Tweede grafiek (voorbeeld) -->
-    <section class="panel">
-      <h2>Laatste 24 uur</h2>
-      <iframe
-        src="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145&orgId=1&from=now-24h&to=now&timezone=browser"
-        loading="lazy">
-      </iframe>
-    </section>
+<!-- PM2.5 -->
+<section>
+  <h2>PM2.5 (fijnstof)</h2>
+  <div class="grid">
+    <iframe data-base="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145&from={FROM}&to=now&timezone=browser&viewPanel=panel-13"></iframe>
+    <iframe data-base="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145&from={FROM}&to=now&timezone=browser&viewPanel=panel-12"></iframe>
+  </div>
+</section>
 
-  </main>
+<!-- PM10 -->
+<section>
+  <h2>PM10</h2>
+  <div class="grid">
+    <iframe data-base="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145&from={FROM}&to=now&timezone=browser&viewPanel=panel-5"></iframe>
+    <iframe data-base="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145&from={FROM}&to=now&timezone=browser&viewPanel=panel-3"></iframe>
+  </div>
+</section>
 
-  <footer>
-    <p>Data: Sensor.Community • Grafana</p>
-  </footer>
+<!-- Temp / RH -->
+<section>
+  <h2>Temperatuur & luchtvochtigheid</h2>
+  <div class="grid">
+    <iframe data-base="https://api-rrd.madavi.de:3000/grafana/d/q87EBfWGk/temperature-humidity-pressure?var-chipID=esp8266-13493145&from={FROM}&to=now&timezone=browser&viewPanel=panel-2"></iframe>
+    <iframe data-base="https://api-rrd.madavi.de:3000/grafana/d/q87EBfWGk/temperature-humidity-pressure?var-chipID=esp8266-13493145&from={FROM}&to=now&timezone=browser&viewPanel=panel-5"></iframe>
+  </div>
+</section>
 
+<!-- Betrouwbaarheid -->
+<section>
+  <h2>Betrouwbaarheid metingen</h2>
+  <iframe class="small"
+    src="https://api-rrd.madavi.de:3000/grafana/d/Fk6mw1WGz/wifi-signal?var-chipID=esp8266-13493145&from=now-3d&to=now&timezone=browser&viewPanel=panel-6">
+  </iframe>
+</section>
+
+<!-- Kaart -->
+<section>
+  <h2>Sensoren in de omgeving</h2>
+  <iframe class="map" src="https://maps.sensor.community/#14/51.8374/5.8463"></iframe>
+</section>
+
+<footer>
+  <a target="_blank"
+     href="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145">
+    → Bekijk alle grafieken in Grafana
+  </a>
+</footer>
+
+<script>setRange('6h');</script>
 </body>
 </html>
