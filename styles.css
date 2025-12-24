@@ -1,57 +1,86 @@
 * {
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
   margin: 0;
-  background: #f5f7fa;
-  color: #333;
+  font-family: system-ui, sans-serif;
+  background: #f4f6f8;
+  color: #111;
+}
+
+nav {
+  background: #111827;
+  color: white;
+  padding: 0.75rem 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+nav a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+nav a.active {
+  color: white;
+  font-weight: 500;
 }
 
 header {
-  padding: 1.5rem;
-  background: #1f2937;
-  color: #fff;
-}
-
-header h1 {
-  margin: 0 0 0.25rem;
-}
-
-header p {
-  margin: 0;
-  opacity: 0.8;
-}
-
-.dashboard {
   padding: 1rem;
+}
+
+section {
+  padding: 1rem;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
   gap: 1rem;
-}
-
-.panel {
-  background: #fff;
-  border-radius: 8px;
-  padding: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
-
-.panel h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1rem;
 }
 
 iframe {
   width: 100%;
   height: 360px;
   border: none;
+  background: white;
+  border-radius: 6px;
+}
+
+iframe.small {
+  height: 200px;
+}
+
+iframe.map {
+  height: 450px;
+}
+
+.controls {
+  margin-bottom: 0.5rem;
+}
+
+.controls button {
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.controls button.active {
+  background: #111827;
+  color: white;
 }
 
 footer {
   padding: 1rem;
-  text-align: center;
   font-size: 0.85rem;
-  color: #666;
+  color: #555;
 }
