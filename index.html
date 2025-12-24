@@ -55,17 +55,26 @@
 
   <!-- Twee grote boven -->
   <div class="grid">
+    <!-- PM10 last 12h -->
     <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-12h&to=now&timezone=browser&panelId=3&kiosk"></iframe>
-    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-12h&to=now&timezone=browser&panelId=16&kiosk"></iframe>
+
+    <!-- PM10 moving 24h average over last 7 days -->
+    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-7d&to=now&timezone=browser&panelId=11&kiosk"></iframe>
   </div>
 
   <!-- Drie kleine eronder -->
   <div class="grid grid-small">
-    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-12h&to=now&timezone=browser&panelId=13&kiosk"></iframe>
-    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-12h&to=now&timezone=browser&panelId=14&kiosk"></iframe>
-    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-12h&to=now&timezone=browser&panelId=15&kiosk"></iframe>
+    <!-- PM10 last 7 days -->
+    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-7d&to=now&timezone=browser&panelId=5&kiosk"></iframe>
+
+    <!-- PM10 last 4 weeks -->
+    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-28d&to=now&timezone=browser&panelId=7&kiosk"></iframe>
+
+    <!-- PM10 last year -->
+    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/GUaL5aZMz/pm-sensors?orgId=1&var-chipID=esp8266-13493145&from=now-1y&to=now&timezone=browser&panelId=9&kiosk"></iframe>
   </div>
 </section>
+
 
 <!-- Betrouwbaarheid -->
 <section>
