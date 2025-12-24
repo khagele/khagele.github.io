@@ -17,26 +17,22 @@ nav a {
   text-decoration: none;
 }
 
-nav a.active {
-  color: white;
-}
+nav a.active { color: white; }
 
-header {
-  padding: 1rem;
-}
+header { padding: 1rem; }
 
-section {
-  padding: 1rem;
-}
+section { padding: 1rem; }
 
-h2 {
-  margin: 0 0 0.5rem;
-}
+h2 { margin: 0 0 0.5rem; }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
   gap: 1rem;
+}
+
+.grid-small {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 iframe {
@@ -47,15 +43,7 @@ iframe {
   border-radius: 8px;
 }
 
-iframe.small {
-  height: 200px;
-}
+iframe.small { height: 200px; }
+iframe.map { height: 420px; }
 
-iframe.map {
-  height: 420px;
-}
-
-footer {
-  padding: 1rem;
-  font-size: 0.9rem;
-}
+footer { padding: 1rem; font-size: 0.9rem; }
