@@ -23,11 +23,23 @@
 <main>
 
 <!-- Temperatuur & luchtvochtigheid -->
+<!-- Deze panelen hebben in Grafana een eigen timeFrom; from/to in de URL wordt
+     genegeerd. Het tijdsbereik volgt uit de panelId:
+     temperatuur 2=24u 5=7d, vochtigheid 3=24u 6=7d.
+     Druk (4, 7) is er niet: de sensor is een SHT30, die meet geen luchtdruk. -->
 <section>
   <h2>Temperatuur & luchtvochtigheid</h2>
+
+  <!-- Temperatuur: 24 uur en 7 dagen -->
   <div class="grid">
-    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/q87EBfWGk/temperature-humidity-pressure?orgId=1&var-chipID=esp8266-13493145&from=now-6h&to=now&timezone=browser&panelId=2&kiosk"></iframe>
-    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/q87EBfWGk/temperature-humidity-pressure?orgId=1&var-chipID=esp8266-13493145&from=now-6h&to=now&timezone=browser&panelId=5&kiosk"></iframe>
+    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/q87EBfWGk/temperature-humidity-pressure?orgId=1&var-chipID=esp8266-13493145&timezone=browser&panelId=2&kiosk"></iframe>
+    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/q87EBfWGk/temperature-humidity-pressure?orgId=1&var-chipID=esp8266-13493145&timezone=browser&panelId=5&kiosk"></iframe>
+  </div>
+
+  <!-- Luchtvochtigheid: 24 uur en 7 dagen -->
+  <div class="grid">
+    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/q87EBfWGk/temperature-humidity-pressure?orgId=1&var-chipID=esp8266-13493145&timezone=browser&panelId=3&kiosk"></iframe>
+    <iframe src="https://api-rrd.madavi.de:3000/grafana/d-solo/q87EBfWGk/temperature-humidity-pressure?orgId=1&var-chipID=esp8266-13493145&timezone=browser&panelId=6&kiosk"></iframe>
   </div>
 </section>
 
@@ -87,7 +99,8 @@
 <!-- Omgevingssensoren -->
 <section>
   <h2>Sensoren in de omgeving</h2>
-  <iframe class="map" src="https://maps.sensor.community/#14/51.8374/5.8463"></iframe>
+  <!-- Positie van sensor 94016/94017 volgens data.sensor.community: 51.84171, 5.83883 -->
+  <iframe class="map" src="https://maps.sensor.community/#15/51.8417/5.8388"></iframe>
 </section>
 
 <footer>
