@@ -203,3 +203,184 @@ footer { padding: 1rem; font-size: 0.9rem; }
   padding: 0.8rem 1rem;
   font-size: 0.9rem;
 }
+
+/* ---- Sparklines in de tegels (zie tegels.js) ---- */
+
+/* De hele tegel is het aanwijsgebied, niet alleen de lijn. */
+.tegel.met-strook {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
+  cursor: crosshair;
+}
+
+.spark-strook {
+  position: relative;
+  margin: 0.7rem -1rem 0;
+  height: 40px;
+  touch-action: pan-y;   /* verticaal scrollen op mobiel blijft werken */
+}
+
+.spark-strook svg { width: 100%; height: 100%; display: block; }
+
+/* Vaste hoogte: de voetregel wisselt bij hover naar de exacte meting en de
+   tegel mag daar niet van verspringen. */
+.voet { min-height: 1.1em; }
+
+/* Aanwijzer als HTML-overlay, niet in de SVG: die is met
+   preserveAspectRatio="none" horizontaal uitgerekt, waardoor een cirkel
+   daar een ellips zou worden. */
+.spark-cursor { position: absolute; inset: 0; pointer-events: none; }
+
+.spark-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #475569;
+  opacity: 0.8;
+}
+
+.spark-dot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--kleur, #6b7280);
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px rgba(16,24,40,0.15);
+  transform: translate(-50%, -50%);
+}
+
+/* "nu" staat per definitie in het midden van het venster. */
+.nu-lijn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: #0f172a;
+  opacity: 0.32;
+  pointer-events: none;
+}
+
+/* Onderaan, want bovenin botst het label in de zomer met de zon. */
+.nu-label {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  opacity: 0.55;
+  background: rgba(255,255,255,0.75);
+  padding: 0 3px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* ---- Gecombineerd paneel ----
+   Donker, want alleen zo kan het nachtdeel van de luchtachtergrond echt
+   nacht zijn en vallen de sterren niet weg. */
+
+.groot {
+  position: relative;
+  background: #0f172a;
+  color: #f1f5f9;
+  border-radius: 12px;
+  padding: 0.9rem 1rem 0;
+  margin-bottom: 1rem;
+  cursor: crosshair;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(16,24,40,0.18);
+}
+
+.groot-kop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.groot-titel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #94a3b8;
+}
+
+.groot-tijd { font-size: 0.8rem; color: #cbd5e1; font-variant-numeric: tabular-nums; }
+
+.groot-waardes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.5rem 0 0.2rem;
+}
+
+.gw-label { display: block; font-size: 0.72rem; color: #94a3b8; margin-bottom: 0.1rem; }
+
+.gw-getal {
+  font-size: 1.5rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+}
+
+.gw-eh { font-size: 0.8rem; color: #94a3b8; margin-left: 0.15rem; }
+
+/* Streepje in de kleur van de lijn — dat is meteen de legenda. */
+.gw-merk {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+  vertical-align: middle;
+  margin-right: 0.35rem;
+}
+
+.groot-graf { position: relative; margin: 0.3rem -1rem 0; height: 140px; touch-action: pan-y; }
+.groot-graf > svg { width: 100%; height: 100%; display: block; }
+
+/* Aanwijzer en "nu" moeten licht zijn op het donkere paneel. */
+.groot .spark-guide { background: #e2e8f0; opacity: 0.85; }
+.groot .nu-lijn { background: #f8fafc; opacity: 0.5; }
+.groot .nu-label { color: #e2e8f0; background: rgba(15,23,42,0.7); opacity: 1; }
+.groot .spark-dot { border-color: #0f172a; box-shadow: 0 0 0 1px rgba(248,250,252,0.4); }
+
+/* Zon, maan en sterren als overlay, zodat ze rond blijven. */
+.hemel {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  line-height: 0;
+}
+
+.hemel.zon { filter: drop-shadow(0 0 4px rgba(251,191,36,0.55)); }
+.hemel.maan { filter: drop-shadow(0 0 3px rgba(226,232,240,0.4)); }
+
+.ster { position: absolute; border-radius: 50%; background: #f8fafc; pointer-events: none; }
+
+.legenda {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.6rem;
+}
+
+.legenda i {
+  display: inline-block;
+  width: 18px;
+  height: 0;
+  border-top: 2px solid #9ca3af;
+  vertical-align: middle;
+  margin-right: 0.3rem;
+}
+
+.legenda i.stippel { border-top-style: dashed; }

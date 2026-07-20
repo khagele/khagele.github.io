@@ -22,14 +22,19 @@
 
 <main>
 
-<!-- Actuele waardes. Gevuld door tegels.js vanuit de sensor.community-API;
-     zonder JavaScript blijft dit blok simpelweg leeg en werkt de rest door. -->
+<!-- Actuele waardes, historie en verwachting. Gevuld door tegels.js; zonder
+     JavaScript blijven deze blokken leeg en werkt de rest van de pagina door. -->
 <section class="nu" id="nu">
   <div class="nu-kop">
     <h2>Nu gemeten</h2>
     <span class="versheid"><span class="puls"></span><span id="versheid-tekst">verbinden…</span></span>
   </div>
+  <div id="alles-in-een"></div>
   <div class="tegels" id="tegels"></div>
+  <div class="legenda">
+    <span><i></i>gemeten door de sensor</span>
+    <span><i class="stippel"></i>verwachting Open-Meteo (regionaal model, geen puntmeting)</span>
+  </div>
 </section>
 
 <!-- Temperatuur & luchtvochtigheid -->

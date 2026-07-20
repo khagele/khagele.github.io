@@ -6,6 +6,12 @@ on:
   push:
     branches: ["main"]
 
+  # De gemeten lijn in de tegels komt uit historie.json, die hieronder bij
+  # elke deploy opnieuw wordt opgehaald. Zonder schema zou die lijn blijven
+  # staan op het moment van de laatste push.
+  schedule:
+    - cron: "*/30 * * * *"
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -33,6 +39,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      # Schrijft historie.json in de werkmap, die hieronder mee de artifact in
+      # gaat. Bewust niet committen: dat zou elke 30 minuten een commit geven.
+      # Het script faalt zacht, dus een onbereikbare InfluxDB houdt de deploy
+      # niet tegen -- de pagina laat de lijn dan gewoon weg.
+      - name: Historie ophalen
+        run: python3 .github/historie.py
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
