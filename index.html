@@ -22,6 +22,16 @@
 
 <main>
 
+<!-- Actuele waardes. Gevuld door tegels.js vanuit de sensor.community-API;
+     zonder JavaScript blijft dit blok simpelweg leeg en werkt de rest door. -->
+<section class="nu" id="nu">
+  <div class="nu-kop">
+    <h2>Nu gemeten</h2>
+    <span class="versheid"><span class="puls"></span><span id="versheid-tekst">verbinden…</span></span>
+  </div>
+  <div class="tegels" id="tegels"></div>
+</section>
+
 <!-- Temperatuur & luchtvochtigheid -->
 <!-- Deze panelen hebben in Grafana een eigen timeFrom; from/to in de URL wordt
      genegeerd. Het tijdsbereik volgt uit de panelId:
@@ -111,5 +121,7 @@
 </footer>
 
 </main>
+
+<script src="tegels.js" defer></script>
 </body>
 </html>

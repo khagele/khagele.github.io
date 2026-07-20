@@ -47,3 +47,159 @@ iframe.small { height: 200px; }
 iframe.map { height: 420px; }
 
 footer { padding: 1rem; font-size: 0.9rem; }
+
+/* ---- Actuele waardes (tegels bovenaan, zie tegels.js) ---- */
+
+.nu-kop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.nu-kop h2 { margin: 0; }
+
+.versheid {
+  font-size: 0.85rem;
+  color: #6b7280;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.puls {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #16a34a;
+  animation: puls 2.4s infinite;
+}
+
+@keyframes puls {
+  0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.45); }
+  70%  { box-shadow: 0 0 0 7px rgba(22,163,74,0); }
+  100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+}
+
+/* Sensor stil of onbereikbaar: dimmen, zodat je niet ongemerkt naar
+   oude cijfers zit te kijken. */
+.nu.verouderd .tegels { opacity: 0.55; }
+.nu.verouderd .puls { background: #9ca3af; animation: none; }
+
+.tegels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+}
+
+.tegel {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 0.9rem 1rem 1rem;
+  box-shadow: 0 1px 2px rgba(16,24,40,0.06), 0 1px 3px rgba(16,24,40,0.04);
+  overflow: hidden;
+}
+
+/* Gekleurd streepje links: de kwaliteitsband in één oogopslag. */
+.tegel::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--kleur, #d1d5db);
+}
+
+.tegel-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 0.35rem;
+}
+
+.waarde {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.getal {
+  font-size: 2.1rem;
+  font-weight: 650;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.eenheid { font-size: 0.95rem; color: #6b7280; }
+
+.duiding {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #374151;
+}
+
+.stip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--kleur, #d1d5db);
+  flex: none;
+}
+
+/* Meterbalk. Geen overflow:hidden — dat zou de ijkstreep wegknippen. */
+.meter {
+  position: relative;
+  margin-top: 0.6rem;
+  height: 4px;
+  border-radius: 2px;
+  background: #eef1f5;
+}
+
+.meter i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 2px;
+  background: var(--kleur, #d1d5db);
+  transition: width 0.6s ease;
+}
+
+/* Vaste ijkstreep op de advieswaarde. Links daarvan is de schaal lineair,
+   rechts logaritmisch tot 10×, zodat een slechte dag niet altijd
+   "balk helemaal vol" oplevert. */
+.meter.geijkt::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: var(--ijk, 60%);
+  width: 1px;
+  background: #94a3b8;
+  border-radius: 1px;
+}
+
+.voet {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.fout {
+  grid-column: 1 / -1;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+}
