@@ -480,7 +480,7 @@
     el.innerHTML = `
       <div class="groot-kop">
         <span class="groot-naam">${NAAM}</span>
-        <span class="groot-versheid"><span class="puls"></span>${versheid}</span>
+        <span class="groot-versheid" title="${versheid}"><span class="puls"></span><span class="alleen-voorlezen">${versheid}</span></span>
         <span class="groot-tijd">${stempel(Date.now())}</span>
       </div>
       <div class="groot-waardes">
@@ -658,7 +658,11 @@
     const kop = document.getElementById('nu-kop');
     if (!kop) return;
     kop.hidden = tekst === null;
-    if (tekst !== null) document.getElementById('versheid-tekst').textContent = tekst;
+    if (tekst === null) return;
+    // Tekst blijft in de DOM voor schermlezers; zichtbaar is alleen de stip,
+    // met de tekst als tooltip.
+    document.getElementById('versheid-tekst').textContent = tekst;
+    kop.querySelector('.versheid')?.setAttribute('title', tekst);
   };
 
   const toonFout = boodschap => {
