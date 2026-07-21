@@ -21,6 +21,41 @@ nav a.active { color: white; }
 
 section { padding: 1rem; }
 
+/* ---- Leespagina (Over) ---- */
+
+/* Regellengte begrenzen; volle breedte leest slecht op een breed scherm. */
+.tekst {
+  max-width: 42rem;
+  padding: 1.5rem 1rem 3rem;
+  line-height: 1.65;
+}
+
+.tekst h1 { margin: 0 0 1rem; font-size: 1.7rem; letter-spacing: -0.02em; }
+.tekst h2 { margin: 2.2rem 0 0.6rem; font-size: 1.15rem; }
+.tekst p { margin: 0 0 1rem; }
+.tekst ul, .tekst ol { margin: 0 0 1rem; padding-left: 1.3rem; }
+.tekst li { margin-bottom: 0.4rem; }
+
+.tekst .inleiding { font-size: 1.08rem; color: #374151; }
+
+.tekst code {
+  background: #eef1f5;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.tekst a { color: #0369a1; }
+.tekst a:hover { text-decoration: none; }
+
+.tekst .voetnoot {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
 h2 { margin: 0 0 0.5rem; }
 
 .grid {

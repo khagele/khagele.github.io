@@ -2,7 +2,8 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Over – db11.nl</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Over dit weerstation – db11.nl</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,29 +12,150 @@
   <strong>db11.nl</strong>
   <a href="index.html">Dashboard</a>
   <a class="active" href="over.html">Over</a>
-  <a href="data.html">Data</a>
 </nav>
 
-<section>
-  <h1>Over dit dashboard</h1>
-  <p>
-    Dit is een lokaal dashboard met open meetdata van een
-    SDS011 fijnstofsensor (Sensor.Community).
+<section class="tekst">
+  <h1>Over dit weerstation</h1>
+
+  <p class="inleiding">
+    Dit is een zelfbouwsensor: een kastje van een handvol onderdelen, in
+    elkaar gezet aan de keukentafel en opgehangen in Nijmegen-West. Het meet
+    fijnstof, temperatuur en luchtvochtigheid, en stuurt die metingen elke
+    paar minuten naar een open netwerk waar iedereen ze kan gebruiken. Deze
+    pagina legt uit hoe dat werkt — en hoe je er zelf ook een kunt bouwen.
   </p>
 
+  <h2>Wat er in het kastje zit</h2>
+
   <p>
-    Het station staat in Nijmegen-West en meet elke minuut. Eén kastje, drie
-    nummers: <strong>esp8266-13493145</strong> is het bordje zelf (zo heet het
-    bij Madavi en in Grafana), <strong>94016</strong> is de fijnstofsensor en
-    <strong>94017</strong> die voor temperatuur en luchtvochtigheid.
+    Het ontwerp heet <strong>airRohr</strong> en komt van
+    <a href="https://sensor.community/nl/">Sensor.Community</a>, een
+    burgerwetenschapsnetwerk met wereldwijd duizenden van deze kastjes.
+    Alles is open: de bouwtekening, de software en de meetdata.
   </p>
 
   <ul>
-    <li><a href="https://sensor.community/en/sensors/airrohr/">Sensor.Community / Airrohr</a></li>
-    <li><a href="https://www.samenmeten.nl/fijn-stof-pm25pm10">Uitleg PM2.5 & PM10</a></li>
-    <li><a href="https://api-rrd.madavi.de/">Madavi data platform</a></li>
-    <li><a href="https://maps.sensor.community/#15/51.8417/5.8388">Het station op de kaart</a></li>
+    <li><strong>NodeMCU ESP8266</strong> — een wifi-bordje ter grootte van een duim, dat de metingen uitleest en verstuurt</li>
+    <li><strong>SDS011</strong> — de fijnstofsensor; een klein ventilatortje zuigt lucht langs een laserstraal</li>
+    <li><strong>SHT30</strong> — temperatuur en luchtvochtigheid</li>
+    <li>Een stuk <strong>hemelwaterafvoerbocht</strong> als regenkap, met een slangetje naar de sensor</li>
   </ul>
+
+  <p>
+    De standaardbouwtekening gebruikt een BME280 in plaats van een SHT30. Die
+    meet ook luchtdruk. Dit station heeft dat niet, en daarom staat er geen
+    luchtdruk op het dashboard.
+  </p>
+
+  <h2>Zelf bouwen</h2>
+
+  <p>
+    Je hoeft niet te kunnen programmeren. Solderen is handig maar niet
+    strikt nodig; er zijn ook kant-en-klare sets te koop waarbij de software
+    er al op staat. Ruwweg gaat het zo:
+  </p>
+
+  <ol>
+    <li>Zet de firmware op het bordje met de
+        <a href="https://firmware.sensor.community/airrohr/flashing-tool/">flashing tool</a>,
+        vóórdat je alles vastmaakt</li>
+    <li>Verbind de sensoren met een handjevol draadjes volgens het schema</li>
+    <li>Bouw het geheel in de regenkap</li>
+    <li>Het kastje maakt een eigen wifi-netwerk aan; via
+        <code>http://192.168.4.1/</code> geef je je eigen wifi door</li>
+    <li>Registreer het bij
+        <a href="https://devices.sensor.community/">devices.sensor.community</a>,
+        dan verschijn je binnen een kwartier op de kaart</li>
+  </ol>
+
+  <p>
+    Ophangen doe je op anderhalve tot drieënhalve meter hoogte, vrij van de
+    muur en niet pal boven een warmtebron. De plek bepaalt sterk wat je meet:
+    aan een drukke straat lees je iets heel anders dan in een achtertuin.
+    Vragen kun je kwijt op het
+    <a href="https://forum.sensor.community/">forum</a>.
+  </p>
+
+  <ul>
+    <li><a href="https://sensor.community/en/sensors/airrohr/">Volledige bouwhandleiding met foto's en aansluitschema</a></li>
+    <li><a href="https://sensor.community/nl/sensors/">Overzicht van sensortypes en waar je onderdelen koopt</a></li>
+    <li>Kant-en-klare sets bij <a href="https://nettigo.eu/products/sensor-community-kit-sds011-sht31-english-language">Nettigo</a>
+        of <a href="https://shop.blinkyparts.com/en/Fine-Dust-Sensor-Kit-Complete-kit-compatible-with-sensor.community/blink232942.6">BlinkyParts</a></li>
+    <li><a href="https://github.com/opendata-stuttgart/sensors-software">Broncode van de firmware</a></li>
+  </ul>
+
+  <h2>Hoe betrouwbaar is het?</h2>
+
+  <p>
+    Zo'n zelfbouwkastje is geen meetstation van het RIVM, en het is goed om te
+    weten waar de grenzen zitten.
+  </p>
+
+  <ul>
+    <li>De SDS011 telt deeltjes <strong>optisch</strong> en rekent om naar een
+        gewicht per kubieke meter. Daarbij gaat hij uit van een gemiddelde
+        dichtheid, wat niet altijd klopt.</li>
+    <li>Deeltjes kleiner dan 0,3 µm ziet hij <strong>niet</strong> — juist de
+        fijnste verbrandingsdeeltjes. Voor verkeersuitstoot is hij daarom
+        minder geschikt dan voor bijvoorbeeld houtrook of opgewaaid stof.</li>
+    <li>Bij <strong>hoge luchtvochtigheid</strong> zwellen deeltjes op met water
+        en meet hij te hoog. Mist en motregen geven pieken die geen vervuiling
+        zijn.</li>
+    <li>De temperatuur zit in hetzelfde kastje aan de buitenlucht. Staat het in
+        de zon, dan leest hij warmer dan de officiële schaduwtemperatuur.</li>
+  </ul>
+
+  <p>
+    Daarom toont het dashboard het gemiddelde over de laatste vijf minuten en
+    niet één losse meting: die schommelt te veel om iets van af te lezen.
+  </p>
+
+  <h2>Waar de cijfers vandaan komen</h2>
+
+  <p>
+    Het dashboard combineert drie bronnen. De <strong>doorgetrokken lijn</strong>
+    is wat deze sensor zelf heeft gemeten. De <strong>gestippelde lijn</strong>
+    is een verwachting van <a href="https://open-meteo.com/">Open-Meteo</a>: een
+    regionaal rekenmodel, geen meting op deze plek. Die twee wijken van elkaar
+    af, en dat is geen storing — een model over de hele regio kan nu eenmaal
+    niet zien wat er precies in deze tuin gebeurt.
+  </p>
+
+  <p>
+    De fijnstoftegels vergelijken met de <strong>WHO-advieswaarde</strong> voor
+    een etmaal: 15 µg/m³ voor PM2.5 en 45 voor PM10. Die is strenger dan de
+    Europese grenswaarde, omdat hij naar gezondheid kijkt en niet naar
+    haalbaarheid. Boven die waarde kleurt de lijn rood.
+  </p>
+
+  <h2>Dit station</h2>
+
+  <p>
+    Eén kastje, drie nummers. <strong>esp8266-13493145</strong> is het bordje
+    zelf, zoals Madavi en Grafana het kennen. <strong>94016</strong> is de
+    fijnstofsensor en <strong>94017</strong> die voor temperatuur en
+    luchtvochtigheid.
+  </p>
+
+  <ul>
+    <li><a href="https://maps.sensor.community/#15/51.8417/5.8388">Dit station op de kaart</a></li>
+    <li><a href="https://api-rrd.madavi.de:3000/grafana/d/GUaL5aZMz/pm-sensors?var-chipID=esp8266-13493145">Alle grafieken in Grafana</a></li>
+    <li><a href="https://archive.sensor.community/">Archief met alle metingen per dag</a></li>
+    <li><a href="https://api.sensor.community/">De open API van Sensor.Community</a></li>
+  </ul>
+
+  <h2>Verder lezen</h2>
+
+  <ul>
+    <li><a href="https://www.samenmeten.nl/fijn-stof-pm25pm10">RIVM Samen Meten — wat fijnstof is en wat de waardes betekenen</a></li>
+    <li><a href="https://www.samenmeten.nl/dataportaal">Dataportaal met sensoren van bewoners door heel Nederland</a></li>
+    <li><a href="https://www.luchtmeetnet.nl/">Luchtmeetnet — de officiële meetstations</a></li>
+  </ul>
+
+  <p class="voetnoot">
+    De meetdata van Sensor.Community staat onder de Open Database License:
+    vrij te gebruiken, met bronvermelding.
+  </p>
 </section>
 
 </body>
