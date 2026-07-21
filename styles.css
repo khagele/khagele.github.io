@@ -19,8 +19,6 @@ nav a {
 
 nav a.active { color: white; }
 
-header { padding: 1rem; }
-
 section { padding: 1rem; }
 
 h2 { margin: 0 0 0.5rem; }
@@ -50,6 +48,11 @@ footer { padding: 1rem; font-size: 0.9rem; }
 
 /* ---- Actuele waardes (tegels bovenaan, zie tegels.js) ---- */
 
+/* Nodig omdat de display:flex hieronder het hidden-attribuut overstemt: de
+   browser regelt hidden zelf ook met display, maar verliest van author-CSS.
+   Klasse plus attribuut weegt zwaarder, dus deze wint. */
+.nu-kop[hidden] { display: none; }
+
 .nu-kop {
   display: flex;
   align-items: baseline;
@@ -59,7 +62,9 @@ footer { padding: 1rem; font-size: 0.9rem; }
   margin-bottom: 0.6rem;
 }
 
-.nu-kop h2 { margin: 0; }
+/* Terugvalkop: alleen zichtbaar als het paneel niet gebouwd kon worden, dus
+   ingetogen gehouden -- hij hoort niet te concurreren met de tegels. */
+.nu-kop h1 { margin: 0; font-size: 1.05rem; letter-spacing: -0.01em; }
 
 .versheid {
   font-size: 0.85rem;
@@ -299,20 +304,35 @@ footer { padding: 1rem; font-size: 0.9rem; }
 .groot-kop {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 0.3rem 0.75rem;
   flex-wrap: wrap;
 }
 
-.groot-titel {
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: #94a3b8;
+.groot-naam {
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: #f8fafc;
 }
 
-.groot-tijd { font-size: 0.8rem; color: #cbd5e1; font-variant-numeric: tabular-nums; }
+.groot-versheid {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Duwt de tijd naar rechts, ook als de versheid ernaast is afgebroken. */
+.groot-tijd {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sensor stil: ook hier de stip doven, net als bij de losse kop. */
+.nu.verouderd .groot-versheid .puls { background: #9ca3af; animation: none; }
 
 .groot-waardes {
   display: grid;
@@ -364,6 +384,9 @@ footer { padding: 1rem; font-size: 0.9rem; }
 .hemel.maan { filter: drop-shadow(0 0 3px rgba(226,232,240,0.4)); }
 
 .ster { position: absolute; border-radius: 50%; background: #f8fafc; pointer-events: none; }
+
+/* Zelfde reden als bij .nu-kop: display uit author-CSS overstemt hidden. */
+.legenda[hidden] { display: none; }
 
 .legenda {
   display: flex;

@@ -46,6 +46,16 @@
   const parseUTC = s => Date.parse(s.endsWith('Z') ? s : s + 'Z');
   const klokVan = t => new Date(t).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
 
+  const NAAM = 'Weerstation Nijmegen-West';
+
+  // Datum erbij, want het venster loopt over middernacht heen: alleen "03:45"
+  // laat in het midden of dat vannacht of morgennacht is.
+  const stempel = t => {
+    const d = new Date(t);
+    return d.toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' }) +
+           ' · ' + klokVan(t);
+  };
+
   const geleden = ms => {
     const m = Math.round(ms / 60000);
     if (m < 1) return 'zojuist';
@@ -442,7 +452,7 @@
     { sleutel:'vocht', label:'Luchtvochtigheid', eenheid:'%',     dec:0, kleur:H_PAARS }
   ];
 
-  const grooteTegel = (nu, gemeten, verwacht, t0, t1) => {
+  const grooteTegel = (nu, gemeten, verwacht, t0, t1, versheid) => {
     const H = 44;
     const el = document.createElement('div');
     el.className = 'groot';
@@ -469,8 +479,9 @@
 
     el.innerHTML = `
       <div class="groot-kop">
-        <span class="groot-titel">Alles in één · 12 uur terug, 12 uur vooruit</span>
-        <span class="groot-tijd">nu</span>
+        <span class="groot-naam">${NAAM}</span>
+        <span class="groot-versheid"><span class="puls"></span>${versheid}</span>
+        <span class="groot-tijd">${stempel(Date.now())}</span>
       </div>
       <div class="groot-waardes">
         ${paden.map(r => `<div>
@@ -496,11 +507,11 @@
     koppelHover(el, el.querySelector('.groot-graf'),
       paden.map(r => ({ geo: r.pad.geo, kleur: r.kleur, drempel: r.drempel, over: H_ROOD })),
       (gekozen, aangewezen) => {
-        tijdEl.textContent = klokVan(aangewezen.t) + (aangewezen.soort === 'verwacht' ? ' · verwacht' : '');
+        tijdEl.textContent = stempel(aangewezen.t) + (aangewezen.soort === 'verwacht' ? ' · verwacht' : '');
         paden.forEach((r, n) => { getallen[r.sleutel].textContent = nl(gekozen[n].waarde, r.dec); });
       },
       () => {
-        tijdEl.textContent = 'nu';
+        tijdEl.textContent = stempel(Date.now());
         paden.forEach(r => { getallen[r.sleutel].textContent = nl(nu[r.sleutel], r.dec); });
       });
 
@@ -588,12 +599,15 @@
     const heeftLijn = !!(historie || verwachting);
     const tijd = heeftLijn ? { t0, t1 } : {};
 
-    // Gecombineerd paneel alleen als er iets te tekenen valt.
+    const ouderdom = nuMs - nieuwste([...pmRuw, ...klimRuw]);
+    const versheid = `${geleden(ouderdom)} · gemiddelde over ${pm25 ? pm25.n : '?'} metingen`;
+
+    // Gecombineerd paneel alleen als er iets te tekenen valt. Draagt dan ook de
+    // naam en de versheid; zonder paneel valt dat terug op de losse kop.
     const gDoel = document.getElementById('alles-in-een');
-    if (gDoel) {
-      const groot = heeftLijn ? grooteTegel(nu, gemeten, verwacht, t0, t1) : null;
-      gDoel.replaceChildren(...(groot ? [groot] : []));
-    }
+    const groot = (gDoel && heeftLijn) ? grooteTegel(nu, gemeten, verwacht, t0, t1, versheid) : null;
+    if (gDoel) gDoel.replaceChildren(...(groot ? [groot] : []));
+    zetKop(groot ? null : versheid);
 
     const kaarten = [];
     const reeks = k => heeftLijn ? { gemeten: gemeten[k] ?? [], verwacht: verwacht[k] ?? [] } : {};
@@ -628,18 +642,33 @@
     }
 
     document.getElementById('tegels').replaceChildren(...kaarten);
-
-    const ouderdom = nuMs - nieuwste([...pmRuw, ...klimRuw]);
-    document.getElementById('versheid-tekst').textContent =
-      `${geleden(ouderdom)} · gemiddelde over ${pm25 ? pm25.n : '?'} metingen`;
+    // Legenda gaat over gemeten versus verwacht; zonder lijnen zegt die niets.
+    zetLegenda(heeftLijn);
     document.getElementById('nu').classList.toggle('verouderd', ouderdom > OUD_NA_MIN * 60000);
+  };
+
+  const zetLegenda = tonen => {
+    const el = document.getElementById('legenda');
+    if (el) el.hidden = !tonen;
+  };
+
+  // Losse kop tonen met tekst, of verbergen door null mee te geven -- dan
+  // draagt het paneel de naam al.
+  const zetKop = tekst => {
+    const kop = document.getElementById('nu-kop');
+    if (!kop) return;
+    kop.hidden = tekst === null;
+    if (tekst !== null) document.getElementById('versheid-tekst').textContent = tekst;
   };
 
   const toonFout = boodschap => {
     document.getElementById('tegels').innerHTML =
       `<div class="fout"><strong>Actuele waardes niet beschikbaar.</strong> ${boodschap}.
        De grafieken hieronder werken los hiervan gewoon door.</div>`;
-    document.getElementById('versheid-tekst').textContent = 'geen verbinding';
+    const gDoel = document.getElementById('alles-in-een');
+    if (gDoel) gDoel.replaceChildren();
+    zetKop('geen verbinding');
+    zetLegenda(false);
     document.getElementById('nu').classList.add('verouderd');
   };
 

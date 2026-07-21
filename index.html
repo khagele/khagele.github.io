@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>db11.nl – lokaal dashboard</title>
+  <title>Weerstation Nijmegen-West – db11.nl</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,23 +15,21 @@
   <a href="data.html">Data</a>
 </nav>
 
-<header>
-  <h1>Lokaal dashboard</h1>
-  <p>Sensor esp8266-13493145</p>
-</header>
-
 <main>
 
 <!-- Actuele waardes, historie en verwachting. Gevuld door tegels.js; zonder
-     JavaScript blijven deze blokken leeg en werkt de rest van de pagina door. -->
+     JavaScript blijven deze blokken leeg en werkt de rest van de pagina door.
+     De naam staat normaal in het paneel; de kop hieronder is de terugval voor
+     als dat paneel niet gebouwd kan worden. -->
 <section class="nu" id="nu">
-  <div class="nu-kop">
-    <h2>Nu gemeten</h2>
+  <div class="nu-kop" id="nu-kop">
+    <h1>Weerstation Nijmegen-West</h1>
     <span class="versheid"><span class="puls"></span><span id="versheid-tekst">verbinden…</span></span>
   </div>
   <div id="alles-in-een"></div>
   <div class="tegels" id="tegels"></div>
-  <div class="legenda">
+  <!-- Verborgen zolang er geen lijnen zijn; tegels.js zet dit aan. -->
+  <div class="legenda" id="legenda" hidden>
     <span><i></i>gemeten door de sensor</span>
     <span><i class="stippel"></i>verwachting Open-Meteo (regionaal model, geen puntmeting)</span>
   </div>
