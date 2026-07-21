@@ -188,30 +188,32 @@
       horizonY - Math.min(Math.max(el, 0), TOP_GRADEN) / TOP_GRADEN * (horizonY - H * 0.06);
     const naarX = t => (t - t0) / (t1 - t0) * 100;
 
-    // Baan boven de horizon, plus het punt waar het icoon komt: de opkomst als
-    // die in beeld valt, anders het hoogste punt. Tegen de rand plakken zag
+    // Baan boven de horizon, plus het punt waar het icoon komt: de opkomst.
+    // Alleen een échte horizonkruising telt -- stond hij bij het begin van het
+    // venster al op, dan is dat geen opkomst maar de vensterrand. Is er geen
+    // kruising in beeld, dan het hoogste punt; tegen de rand plakken zag
     // eruit als een fout.
     const baan = fn => {
-      const stukken = []; let huidig = [], opkomst = null, echt = false;
+      const stukken = []; let huidig = [], opkomst = null;
       let top = null, topEl = -Infinity;
       let vorigeOnder = fn(new Date(t0)) <= 0;
       for (let i = 0; i <= 144; i++) {
         const t = t0 + (t1 - t0) * i / 144;
         const el = fn(new Date(t));
         if (el > 0) {
-          if (!huidig.length && !opkomst) {
-            opkomst = { x: naarX(t), y: naarY(el) / H * 100 };
-            echt = vorigeOnder;
-          }
+          if (vorigeOnder && !opkomst) opkomst = { x: naarX(t), y: naarY(el) / H * 100 };
           if (el > topEl) { topEl = el; top = { x: naarX(t), y: naarY(el) / H * 100 }; }
           huidig.push(`${naarX(t).toFixed(2)},${naarY(el).toFixed(2)}`);
         } else if (huidig.length) { stukken.push(huidig); huidig = []; }
         vorigeOnder = el <= 0;
       }
       if (huidig.length) stukken.push(huidig);
+      const plek = opkomst ?? top;
+      // Half over de rand hangen oogt als een fout, dus een marge aanhouden.
+      if (plek) plek.x = Math.min(97, Math.max(3, plek.x));
       return {
         d: stukken.filter(s => s.length > 1).map(s => 'M' + s.join(' L')).join(' '),
-        plek: echt ? opkomst : top, echt
+        plek, echt: !!opkomst
       };
     };
 
@@ -540,15 +542,20 @@
         return uit;
       });
 
-  const haalVerwachting = async nuMs => {
-    const q = `latitude=${SENSOR.lat}&longitude=${SENSOR.lon}&forecast_days=2&timezone=UTC`;
+  // past_days=1 erbij, zodat het model ook het recente verleden dekt. Dat is
+  // nodig omdat historie.json alleen bij een deploy wordt ververst en GitHub
+  // geplande runs afknijpt: in de praktijk loopt de meting soms uren achter.
+  // De modellijn vult dat gat, en omdat die gestippeld is blijft zichtbaar
+  // dat het model is en geen meting.
+  const haalVerwachting = async () => {
+    const q = `latitude=${SENSOR.lat}&longitude=${SENSOR.lon}&forecast_days=2&past_days=1&timezone=UTC`;
     const [lucht, weer] = await Promise.all([
       fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?${q}&hourly=pm2_5,pm10`).then(r => r.json()),
       fetch(`https://api.open-meteo.com/v1/forecast?${q}&hourly=temperature_2m,relative_humidity_2m`).then(r => r.json())
     ]);
     const uren = (bron, veld) => bron.hourly.time
       .map((t, i) => ({ t: parseUTC(t), v: bron.hourly[veld][i] }))
-      .filter(p => p.t >= nuMs);   // vóór nu hebben we de echte meting
+      .filter(p => p.v != null);
     return {
       pm25: uren(lucht, 'pm2_5'), pm10: uren(lucht, 'pm10'),
       temp: uren(weer, 'temperature_2m'), vocht: uren(weer, 'relative_humidity_2m')
@@ -566,7 +573,18 @@
     const nu = { pm25: pm25?.waarde, pm10: pm10?.waarde, temp: temp?.waarde, vocht: vocht?.waarde };
 
     const gemeten = historie ?? {};
-    const verwacht = verwachting ?? {};
+
+    // Model pas laten beginnen waar de meting ophoudt: geen overlap, en geen
+    // gat als de meting achterloopt. Zonder historie begint het model bij t0.
+    const verwacht = {};
+    if (verwachting) {
+      for (const k of ['pm25','pm10','temp','vocht']) {
+        const m = (gemeten[k] ?? []).filter(p => p.v != null);
+        const grens = m.length ? m[m.length - 1].t : t0;
+        verwacht[k] = (verwachting[k] ?? []).filter(p => p.t >= grens);
+      }
+    }
+
     const heeftLijn = !!(historie || verwachting);
     const tijd = heeftLijn ? { t0, t1 } : {};
 
@@ -631,7 +649,7 @@
         haalSensor(PM_SENSOR),
         haalSensor(KLIM_SENSOR),
         zacht(haalHistorie()),
-        zacht(haalVerwachting(Date.now()))
+        zacht(haalVerwachting())
       ]);
       teken(pm, klim, historie, verwachting);
     } catch (e) {
