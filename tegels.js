@@ -446,10 +446,10 @@
   // zinnige y-as. Je ziet dus vorm en samenhang; de hover geeft de getallen.
   // PM10 gestippeld, want beide fijnstoflijnen kleuren rood bij overschrijding.
   const REEKSEN = [
-    { sleutel:'pm25',  label:'PM2.5',            eenheid:'µg/m³', dec:1, kleur:H_GROEN, drempel:WHO24.pm25, log:true },
-    { sleutel:'pm10',  label:'PM10',             eenheid:'µg/m³', dec:1, kleur:H_GROEN, drempel:WHO24.pm10, log:true, streep:true },
     { sleutel:'temp',  label:'Temperatuur',      eenheid:'°C',    dec:1, kleur:H_BLAUW },
-    { sleutel:'vocht', label:'Luchtvochtigheid', eenheid:'%',     dec:0, kleur:H_PAARS }
+    { sleutel:'vocht', label:'Luchtvochtigheid', eenheid:'%',     dec:0, kleur:H_PAARS },
+    { sleutel:'pm25',  label:'PM2.5',            eenheid:'µg/m³', dec:1, kleur:H_GROEN, drempel:WHO24.pm25, log:true },
+    { sleutel:'pm10',  label:'PM10',             eenheid:'µg/m³', dec:1, kleur:H_GROEN, drempel:WHO24.pm10, log:true, streep:true }
   ];
 
   const grooteTegel = (nu, gemeten, verwacht, t0, t1, versheid) => {
@@ -612,17 +612,8 @@
     const kaarten = [];
     const reeks = k => heeftLijn ? { gemeten: gemeten[k] ?? [], verwacht: verwacht[k] ?? [] } : {};
 
-    for (const [k, label, grens] of [['pm25','PM2.5',WHO24.pm25], ['pm10','PM10',WHO24.pm10]]) {
-      if (nu[k] == null) continue;
-      const [, woord, kleur] = band(k, nu[k]);
-      const r = nu[k] / grens;
-      kaarten.push(tegel({
-        label, getal: nu[k], decimalen: 1, eenheid: 'µg/m³', duiding: woord, kleur,
-        meter: meterBreedte(r), ijk: IJK_PCT, voet: verhoudingTekst(r, grens),
-        drempel: grens, log: true, ...reeks(k), ...tijd
-      }));
-    }
-
+    // Volgorde gelijk aan REEKSEN hierboven, zodat de kleuren in de paneelkop
+    // in dezelfde volgorde staan als de tegels eronder.
     if (nu.temp != null) {
       const dp = nu.vocht != null ? dauwpunt(nu.temp, nu.vocht) : null;
       kaarten.push(tegel({
@@ -638,6 +629,17 @@
       kaarten.push(tegel({
         label: 'Luchtvochtigheid', getal: nu.vocht, decimalen: 0, eenheid: '%',
         duiding: woord, kleur, meter: nu.vocht, ...reeks('vocht'), ...tijd
+      }));
+    }
+
+    for (const [k, label, grens] of [['pm25','PM2.5',WHO24.pm25], ['pm10','PM10',WHO24.pm10]]) {
+      if (nu[k] == null) continue;
+      const [, woord, kleur] = band(k, nu[k]);
+      const r = nu[k] / grens;
+      kaarten.push(tegel({
+        label, getal: nu[k], decimalen: 1, eenheid: 'µg/m³', duiding: woord, kleur,
+        meter: meterBreedte(r), ijk: IJK_PCT, voet: verhoudingTekst(r, grens),
+        drempel: grens, log: true, ...reeks(k), ...tijd
       }));
     }
 
