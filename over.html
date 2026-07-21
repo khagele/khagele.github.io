@@ -18,11 +18,10 @@
   <h1>Over dit weerstation</h1>
 
   <p class="inleiding">
-    Dit is een zelfbouwsensor: een kastje van een handvol onderdelen, in
-    elkaar gezet aan de keukentafel en opgehangen in Nijmegen-West. Het meet
-    fijnstof, temperatuur en luchtvochtigheid, en stuurt die metingen elke
-    paar minuten naar een open netwerk waar iedereen ze kan gebruiken. Deze
-    pagina legt uit hoe dat werkt — en hoe je er zelf ook een kunt bouwen.
+    Dit weerstation is zelfbouw: een kastje van een handvol onderdelen,
+    opgehangen in Nijmegen-West. Het meet fijnstof, temperatuur en
+    luchtvochtigheid en stuurt dat elke paar minuten naar een open netwerk.
+    Hieronder staat hoe het werkt en hoe je er zelf een bouwt.
   </p>
 
   <h2>Wat er in het kastje zit</h2>
@@ -35,9 +34,9 @@
   </p>
 
   <ul>
-    <li><strong>NodeMCU ESP8266</strong> — een wifi-bordje ter grootte van een duim, dat de metingen uitleest en verstuurt</li>
-    <li><strong>SDS011</strong> — de fijnstofsensor; een klein ventilatortje zuigt lucht langs een laserstraal</li>
-    <li><strong>SHT30</strong> — temperatuur en luchtvochtigheid</li>
+    <li><strong>NodeMCU ESP8266</strong>: een wifi-bordje ter grootte van een duim, dat de metingen uitleest en verstuurt</li>
+    <li><strong>SDS011</strong>: de fijnstofsensor; een klein ventilatortje zuigt lucht langs een laserstraal</li>
+    <li><strong>SHT30</strong>: temperatuur en luchtvochtigheid</li>
     <li>Een stuk <strong>hemelwaterafvoerbocht</strong> als regenkap, met een slangetje naar de sensor</li>
   </ul>
 
@@ -50,9 +49,9 @@
   <h2>Zelf bouwen</h2>
 
   <p>
-    Je hoeft niet te kunnen programmeren. Solderen is handig maar niet
-    strikt nodig; er zijn ook kant-en-klare sets te koop waarbij de software
-    er al op staat. Ruwweg gaat het zo:
+    Programmeren hoeft niet. Solderen is handig maar niet verplicht, en er
+    zijn kant-en-klare sets waarbij de software er al op staat. In grote
+    lijnen:
   </p>
 
   <ol>
@@ -69,11 +68,10 @@
   </ol>
 
   <p>
-    Ophangen doe je op anderhalve tot drieënhalve meter hoogte, vrij van de
-    muur en niet pal boven een warmtebron. De plek bepaalt sterk wat je meet:
-    aan een drukke straat lees je iets heel anders dan in een achtertuin.
-    Vragen kun je kwijt op het
-    <a href="https://forum.sensor.community/">forum</a>.
+    Waar je hem ophangt bepaalt wat je meet. Aan een drukke straat komt er iets
+    heel anders uit dan in een achtertuin, en geen van beide is fout: het zijn
+    gewoon twee verschillende plekken. Houd anderhalve tot drieënhalve meter
+    aan, los van de gevel en niet boven een warmtebron.
   </p>
 
   <ul>
@@ -82,22 +80,27 @@
     <li>Kant-en-klare sets bij <a href="https://nettigo.eu/products/sensor-community-kit-sds011-sht31-english-language">Nettigo</a>
         of <a href="https://shop.blinkyparts.com/en/Fine-Dust-Sensor-Kit-Complete-kit-compatible-with-sensor.community/blink232942.6">BlinkyParts</a></li>
     <li><a href="https://github.com/opendata-stuttgart/sensors-software">Broncode van de firmware</a></li>
+    <li><a href="https://forum.sensor.community/">Vragen stellen op het forum van Sensor.Community</a></li>
   </ul>
 
   <h2>Hoe betrouwbaar is het?</h2>
 
   <p>
-    Zo'n zelfbouwkastje is geen meetstation van het RIVM, en het is goed om te
-    weten waar de grenzen zitten.
+    Een zelfbouwsensor meet echt iets, maar niet alles even goed. De
+    belangrijkste beperkingen:
   </p>
 
   <ul>
     <li>De SDS011 telt deeltjes <strong>optisch</strong> en rekent om naar een
         gewicht per kubieke meter. Daarbij gaat hij uit van een gemiddelde
         dichtheid, wat niet altijd klopt.</li>
-    <li>Deeltjes kleiner dan 0,3 µm ziet hij <strong>niet</strong> — juist de
-        fijnste verbrandingsdeeltjes. Voor verkeersuitstoot is hij daarom
-        minder geschikt dan voor bijvoorbeeld houtrook of opgewaaid stof.</li>
+    <li>De sensor detecteert deeltjes van 0,3 tot 10 µm, en aan de onderkant
+        onvolledig: bij 0,3 µm ligt de telefficiëntie volgens de fabrikant op
+        70%. Vers verkeersaerosol bestaat grotendeels uit ultrafijne deeltjes
+        onder 0,1 µm. Die vormen het merendeel van de aantalsconcentratie, maar
+        dragen nauwelijks bij aan de massaconcentratie waarin PM2.5 en PM10
+        worden uitgedrukt. Deze waarden zijn daarom geen bruikbare maat voor
+        uitlaatgassen.</li>
     <li>Bij <strong>hoge luchtvochtigheid</strong> zwellen deeltjes op met water
         en meet hij te hoog. Mist en motregen geven pieken die geen vervuiling
         zijn.</li>
@@ -106,35 +109,34 @@
   </ul>
 
   <p>
-    Daarom toont het dashboard het gemiddelde over de laatste vijf minuten en
-    niet één losse meting: die schommelt te veel om iets van af te lezen.
+    Eén losse meting schommelt te veel om iets van af te lezen, dus het
+    dashboard middelt over vijf minuten. Dat maakt de lijn rustiger, niet
+    nauwkeuriger.
   </p>
 
   <h2>Waar de cijfers vandaan komen</h2>
 
   <p>
-    Het dashboard combineert drie bronnen. De <strong>doorgetrokken lijn</strong>
-    is wat deze sensor zelf heeft gemeten. De <strong>gestippelde lijn</strong>
-    is een verwachting van <a href="https://open-meteo.com/">Open-Meteo</a>: een
-    regionaal rekenmodel, geen meting op deze plek. Die twee wijken van elkaar
-    af, en dat is geen storing — een model over de hele regio kan nu eenmaal
-    niet zien wat er precies in deze tuin gebeurt.
+    <strong>Doorgetrokken is gemeten, gestippeld is voorspeld.</strong> De
+    verwachting komt van <a href="https://open-meteo.com/">Open-Meteo</a> en
+    geldt voor de hele regio, niet voor deze tuin. Dat de twee lijnen
+    uiteenlopen hoort erbij en is geen storing.
   </p>
 
   <p>
-    De fijnstoftegels vergelijken met de <strong>WHO-advieswaarde</strong> voor
-    een etmaal: 15 µg/m³ voor PM2.5 en 45 voor PM10. Die is strenger dan de
-    Europese grenswaarde, omdat hij naar gezondheid kijkt en niet naar
-    haalbaarheid. Boven die waarde kleurt de lijn rood.
+    De fijnstoftegels zetten de meting af tegen de
+    <strong>WHO-advieswaarde</strong> per etmaal: 15 µg/m³ voor PM2.5 en 45
+    voor PM10. Die is strenger dan de Europese grenswaarde omdat hij naar
+    gezondheid kijkt, niet naar haalbaarheid. Erboven kleurt de lijn rood.
   </p>
 
   <h2>Dit station</h2>
 
   <p>
-    Eén kastje, drie nummers. <strong>esp8266-13493145</strong> is het bordje
-    zelf, zoals Madavi en Grafana het kennen. <strong>94016</strong> is de
-    fijnstofsensor en <strong>94017</strong> die voor temperatuur en
-    luchtvochtigheid.
+    Het kastje duikt onder drie nummers op. Madavi en Grafana kennen het
+    bordje als <strong>esp8266-13493145</strong>; bij Sensor.Community heet de
+    fijnstofsensor <strong>94016</strong> en de temperatuursensor
+    <strong>94017</strong>.
   </p>
 
   <ul>
@@ -147,14 +149,14 @@
   <h2>Verder lezen</h2>
 
   <ul>
-    <li><a href="https://www.samenmeten.nl/fijn-stof-pm25pm10">RIVM Samen Meten — wat fijnstof is en wat de waardes betekenen</a></li>
+    <li><a href="https://www.samenmeten.nl/fijn-stof-pm25pm10">RIVM Samen Meten: wat fijnstof is en wat de waardes betekenen</a></li>
     <li><a href="https://www.samenmeten.nl/dataportaal">Dataportaal met sensoren van bewoners door heel Nederland</a></li>
-    <li><a href="https://www.luchtmeetnet.nl/">Luchtmeetnet — de officiële meetstations</a></li>
+    <li><a href="https://www.luchtmeetnet.nl/">Luchtmeetnet: de officiële meetstations</a></li>
   </ul>
 
   <p class="voetnoot">
-    De meetdata van Sensor.Community staat onder de Open Database License:
-    vrij te gebruiken, met bronvermelding.
+    Alle metingen zijn open data (ODbL): gebruik ze gerust, met
+    bronvermelding.
   </p>
 </section>
 
